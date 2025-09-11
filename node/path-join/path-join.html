@@ -1,0 +1,176 @@
+<script type="text/javascript">
+    RED.nodes.registerType('path-join', {
+        category: 'function',
+        color: '#DEBD5C',
+        defaults: {
+            name: { value: '' },
+            joinParts: { value: [{ value: '', type: 'str' }] },
+            outputProperty: { value: 'payload' },
+            outputPropertyType: { value: 'msg' },
+            outputAs: { value: 'absolute' },
+            relativeTo: { value: '' },
+            relativeToType: { value: 'str' }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'font-awesome/fa-chain',
+        label: function() {
+            return this.name || 'path join';
+        },
+        oneditprepare: function() {
+            var that = this;
+
+            // Join Parts List
+            $('#node-input-join-parts-container').css('min-height', '150px').editableList({
+                addItem: function(container, i, part) {
+                    var row = $('<div/>').appendTo(container);
+                    var input = $('<input/>', { type: 'text', style: 'width: 70%' }).appendTo(row);
+                    input.typedInput({
+                        default: part.type || 'str',
+                        types: [
+                            'str', 
+                            'msg', 
+                            'flow', 
+                            'global',
+                            {
+                                value: 'cwd',
+                                label: 'current working directory',
+                                icon: 'fa fa-folder',
+                                hasValue: false
+                            }
+                        ]
+                    });
+                    input.typedInput('value', part.value || '');
+                    input.typedInput('type', part.type || 'str');
+                },
+                removable: true,
+                sortable: true
+            });
+
+            // Initialize Join Parts
+            if (this.joinParts) {
+                for (var i = 0; i < this.joinParts.length; i++) {
+                    var part = this.joinParts[i];
+                    $('#node-input-join-parts-container').editableList('addItem', part);
+                }
+            }
+
+            // Output property
+            $('#node-input-outputProperty').typedInput({
+                default: 'msg',
+                typeField: '#node-input-outputPropertyType',
+                types: ['msg', 'flow', 'global']
+            });
+            $('#node-input-outputProperty').typedInput('value', this.outputProperty);
+            $('#node-input-outputProperty').typedInput('type', this.outputPropertyType || 'msg');
+
+            // Output As selector
+            $('#node-input-outputAs').on('change', function() {
+                var outputAs = $(this).val();
+                if (outputAs === 'relative') {
+                    $('#form-row-relativeTo').show();
+                } else {
+                    $('#form-row-relativeTo').hide();
+                }
+            }).trigger('change');
+
+            // RelativeTo property
+            $('#node-input-relativeTo').typedInput({
+                default: 'str',
+                typeField: '#node-input-relativeToType',
+                types: ['str', 'msg', 'flow', 'global']
+            });
+            $('#node-input-relativeTo').typedInput('value', this.relativeTo);
+            $('#node-input-relativeTo').typedInput('type', this.relativeToType || 'str');
+        },
+        oneditsave: function() {
+            var that = this;
+            var parts = $('#node-input-join-parts-container').editableList('items');
+            that.joinParts = [];
+            parts.each(function(i) {
+                var part = $(this);
+                var typedInput = part.find('input');
+                var type = typedInput.typedInput('type');
+                var value = typedInput.typedInput('value');
+                that.joinParts.push({ value: value, type: type });
+            });
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="path-join">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="path-join.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]path-join.label.name">
+    </div>
+
+    <div class="form-row">
+        <label><i class="fa fa-list"></i> <span data-i18n="path-join.label.joinParts"></span></label>
+        <ol id="node-input-join-parts-container" style="min-width: 400px;"></ol>
+    </div>
+
+    <hr>
+
+    <div class="form-row">
+        <label for="node-input-outputProperty"><i class="fa fa-sign-out"></i> <span data-i18n="path-join.label.output"></span></label>
+        <input type="text" id="node-input-outputProperty" style="width: 70%;">
+        <input type="hidden" id="node-input-outputPropertyType">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-outputAs"><i class="fa fa-cogs"></i> <span data-i18n="path-join.label.outputAs"></span></label>
+        <select id="node-input-outputAs">
+            <option value="absolute" data-i18n="path-join.outputAs.absolute"></option>
+            <option value="relative" data-i18n="path-join.outputAs.relative"></option>
+        </select>
+    </div>
+
+    <div id="form-row-relativeTo" class="form-row">
+        <label for="node-input-relativeTo"><i class="fa fa-folder"></i> <span data-i18n="path-join.label.relativeTo"></span></label>
+        <input type="text" id="node-input-relativeTo" style="width: 70%;">
+        <input type="hidden" id="node-input-relativeToType">
+    </div>
+
+</script>
+
+<script type="text/html" data-help-name="path-join">
+    <p>A utility node for joining multiple path segments into a single path using Node.js path module.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">payload <span class="property-type">any</span></dt>
+        <dd>Input message (may be used by configured path parts).</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>The resulting joined path. By default, the result is written to <code>msg.payload</code>.</dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>This node uses the standard Node.js <code>path.join()</code> method to combine multiple path segments.</p>
+    <p>All paths are first normalized using <code>path.normalize()</code>.</p>
+    <h4>Output Options</h4>
+    <ul>
+        <li><b>Normalize</b>: (Default) Outputs the normalized path.</li>
+        <li><b>Absolute</b>: Outputs the absolute path using <code>path.resolve()</code>.</li>
+        <li><b>Relative</b>: Outputs the relative path from a specified base directory.</li>
+    </ul>
+</script>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string | object</span></dt>
+        <dd>The resulting path or an object containing path parts. By default, the result is written to <code>msg.payload</code>.</dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>This node uses the standard Node.js <code>path</code> module to provide cross-platform path manipulation.</p>
+    <p>All paths are first normalized using <code>path.normalize()</code>.</p>
+    <h4>Output Options</h4>
+    <ul>
+        <li><b>Normalize</b>: (Default) Outputs the normalized path.</li>
+        <li><b>Absolute</b>: Outputs the absolute path using <code>path.resolve()</code>.</li>
+        <li><b>Relative</b>: Outputs the relative path from a specified base directory.</li>
+    </ul>
+</script>
+

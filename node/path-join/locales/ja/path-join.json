@@ -1,0 +1,16 @@
+{
+    "path-join": {
+        "label": {
+            "name": "名前",
+            "joinParts": "結合する要素",
+            "output": "出力先",
+            "outputAs": "出力形式",
+            "relativeTo": "基準ディレクトリ"
+        },
+        "outputAs": {
+            "absolute": "絶対パス",
+            "relative": "相対パス"
+        },
+        "help": "Node.js の path モジュールを利用して複数のパス要素を結合するユーティリティノードです。"
+    }
+}

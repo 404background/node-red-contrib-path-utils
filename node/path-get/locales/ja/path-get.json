@@ -1,0 +1,23 @@
+{
+    "path-get": {
+        "label": {
+            "name": "名前",
+            "input": "入力",
+            "getItem": "取得項目",
+            "output": "出力",
+            "outputAs": "出力形式",
+            "relativeTo": "基準パス"
+        },
+        "getItem": {
+            "dirname": "ディレクトリ名",
+            "basename": "ベース名",
+            "extname": "拡張子",
+            "filename": "ファイル名 (拡張子なし)"
+        },
+        "outputAs": {
+            "absolute": "絶対パス",
+            "relative": "相対パス"
+        },
+        "help": "Node.js の path モジュールを利用してパス情報を取得するユーティリティノードです。'current working directory'を選択すると process.cwd() を取得できます。"
+    }
+}

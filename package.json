@@ -1,0 +1,43 @@
+{
+    "name": "@background404/node-red-contrib-path-utils",
+    "version": "0.0.1",
+    "description": "Node-RED nodes for path manipulation using Node.js path module. Includes path-join for combining path segments and path-get for extracting path information.",
+    "main": "node/common.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/404background/node-red-contrib-path-utils.git"
+    },
+    "node-red": {
+        "nodes": {
+            "path-join": "node/path-join/path-join.js",
+            "path-get": "node/path-get/path-get.js"
+        },
+        "version": ">=2.0.0"
+    },
+    "keywords": [
+        "node-red",
+        "path",
+        "file",
+        "filesystem",
+        "join",
+        "dirname",
+        "basename",
+        "extname",
+        "utilities",
+        "cross-platform"
+    ],
+    "author": "404background",
+    "license": "MIT",
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "files": [
+        "node/",
+        "examples/",
+        "README.md",
+        "LICENSE"
+    ]
+}

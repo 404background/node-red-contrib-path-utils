@@ -1,0 +1,544 @@
+[
+    {
+        "id": "example-flow",
+        "type": "tab",
+        "label": "Path Utils Example",
+        "disabled": false,
+        "info": "Comprehensive example demonstrating all features of node-red-contrib-path-utils"
+    },
+    {
+        "id": "inject-basic",
+        "type": "inject",
+        "z": "example-flow",
+        "name": "Basic Path Join",
+        "props": [
+            {
+                "p": "payload",
+                "v": "documents",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "path-join-basic"
+            ]
+        ]
+    },
+    {
+        "id": "path-join-basic",
+        "type": "path-join",
+        "z": "example-flow",
+        "name": "Join: /home + documents + file.txt",
+        "joinParts": [
+            {
+                "type": "str",
+                "value": "/home"
+            },
+            {
+                "type": "msg",
+                "value": "payload"
+            },
+            {
+                "type": "str",
+                "value": "file.txt"
+            }
+        ],
+        "outputProperty": "payload",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 380,
+        "y": 80,
+        "wires": [
+            [
+                "debug-basic"
+            ]
+        ]
+    },
+    {
+        "id": "debug-basic",
+        "type": "debug",
+        "z": "example-flow",
+        "name": "Basic Join Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "inject-cwd",
+        "type": "inject",
+        "z": "example-flow",
+        "name": "Use Current Working Directory",
+        "props": [
+            {
+                "p": "filename",
+                "v": "config.json",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 180,
+        "y": 160,
+        "wires": [
+            [
+                "path-join-cwd"
+            ]
+        ]
+    },
+    {
+        "id": "path-join-cwd",
+        "type": "path-join",
+        "z": "example-flow",
+        "name": "Join: CWD + filename",
+        "joinParts": [
+            {
+                "type": "cwd",
+                "value": ""
+            },
+            {
+                "type": "msg",
+                "value": "filename"
+            }
+        ],
+        "outputProperty": "payload",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "path-get-dirname"
+            ]
+        ]
+    },
+    {
+        "id": "path-get-dirname",
+        "type": "path-get",
+        "z": "example-flow",
+        "name": "Get Directory Name",
+        "input": "payload",
+        "inputType": "msg",
+        "getItem": "dirname",
+        "outputProperty": "directory",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 650,
+        "y": 160,
+        "wires": [
+            [
+                "debug-dirname"
+            ]
+        ]
+    },
+    {
+        "id": "debug-dirname",
+        "type": "debug",
+        "z": "example-flow",
+        "name": "Directory",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "directory",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "inject-complex",
+        "type": "inject",
+        "z": "example-flow",
+        "name": "Complex Path Analysis",
+        "props": [
+            {
+                "p": "payload",
+                "v": "/home/user/projects/myapp/src/components/Button.jsx",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 240,
+        "wires": [
+            [
+                "path-get-basename",
+                "path-get-extname",
+                "path-get-filename",
+                "path-get-dirname-complex"
+            ]
+        ]
+    },
+    {
+        "id": "path-get-basename",
+        "type": "path-get",
+        "z": "example-flow",
+        "name": "Get Basename",
+        "input": "payload",
+        "inputType": "msg",
+        "getItem": "basename",
+        "outputProperty": "basename",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 420,
+        "y": 220,
+        "wires": [
+            [
+                "debug-analysis"
+            ]
+        ]
+    },
+    {
+        "id": "path-get-extname",
+        "type": "path-get",
+        "z": "example-flow",
+        "name": "Get Extension",
+        "input": "payload",
+        "inputType": "msg",
+        "getItem": "extname",
+        "outputProperty": "extension",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 420,
+        "y": 260,
+        "wires": [
+            [
+                "debug-analysis"
+            ]
+        ]
+    },
+    {
+        "id": "path-get-filename",
+        "type": "path-get",
+        "z": "example-flow",
+        "name": "Get Filename (no ext)",
+        "input": "payload",
+        "inputType": "msg",
+        "getItem": "filename",
+        "outputProperty": "filename",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 440,
+        "y": 300,
+        "wires": [
+            [
+                "debug-analysis"
+            ]
+        ]
+    },
+    {
+        "id": "path-get-dirname-complex",
+        "type": "path-get",
+        "z": "example-flow",
+        "name": "Get Directory",
+        "input": "payload",
+        "inputType": "msg",
+        "getItem": "dirname",
+        "outputProperty": "dirname",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 420,
+        "y": 340,
+        "wires": [
+            [
+                "debug-analysis"
+            ]
+        ]
+    },
+    {
+        "id": "debug-analysis",
+        "type": "debug",
+        "z": "example-flow",
+        "name": "Path Analysis",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "inject-relative",
+        "type": "inject",
+        "z": "example-flow",
+        "name": "Relative Path Example",
+        "props": [
+            {
+                "p": "payload",
+                "v": "src",
+                "vt": "str"
+            },
+            {
+                "p": "basePath",
+                "v": "/home/user/projects",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 420,
+        "wires": [
+            [
+                "path-join-relative"
+            ]
+        ]
+    },
+    {
+        "id": "path-join-relative",
+        "type": "path-join",
+        "z": "example-flow",
+        "name": "Join as Relative",
+        "joinParts": [
+            {
+                "type": "msg",
+                "value": "basePath"
+            },
+            {
+                "type": "msg",
+                "value": "payload"
+            },
+            {
+                "type": "str",
+                "value": "components"
+            }
+        ],
+        "outputProperty": "payload",
+        "outputPropertyType": "msg",
+        "outputAs": "relative",
+        "relativeTo": "/home/user",
+        "relativeToType": "str",
+        "x": 400,
+        "y": 420,
+        "wires": [
+            [
+                "debug-relative"
+            ]
+        ]
+    },
+    {
+        "id": "debug-relative",
+        "type": "debug",
+        "z": "example-flow",
+        "name": "Relative Path",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "inject-cwd-get",
+        "type": "inject",
+        "z": "example-flow",
+        "name": "Get Current Working Directory",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 190,
+        "y": 500,
+        "wires": [
+            [
+                "path-get-cwd"
+            ]
+        ]
+    },
+    {
+        "id": "path-get-cwd",
+        "type": "path-get",
+        "z": "example-flow",
+        "name": "Get CWD Directory",
+        "input": "",
+        "inputType": "cwd",
+        "getItem": "dirname",
+        "outputProperty": "payload",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 420,
+        "y": 500,
+        "wires": [
+            [
+                "debug-cwd"
+            ]
+        ]
+    },
+    {
+        "id": "debug-cwd",
+        "type": "debug",
+        "z": "example-flow",
+        "name": "Current Working Directory",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "inject-flow-context",
+        "type": "inject",
+        "z": "example-flow",
+        "name": "Flow Context Example",
+        "props": [
+            {
+                "p": "payload",
+                "v": "test",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 580,
+        "wires": [
+            [
+                "set-flow-context"
+            ]
+        ]
+    },
+    {
+        "id": "set-flow-context",
+        "type": "change",
+        "z": "example-flow",
+        "name": "Set Flow Context",
+        "rules": [
+            {
+                "t": "set",
+                "p": "projectRoot",
+                "pt": "flow",
+                "to": "/var/projects/myapp",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 580,
+        "wires": [
+            [
+                "path-join-flow"
+            ]
+        ]
+    },
+    {
+        "id": "path-join-flow",
+        "type": "path-join",
+        "z": "example-flow",
+        "name": "Join using Flow Context",
+        "joinParts": [
+            {
+                "type": "flow",
+                "value": "projectRoot"
+            },
+            {
+                "type": "str",
+                "value": "logs"
+            },
+            {
+                "type": "msg",
+                "value": "payload"
+            },
+            {
+                "type": "str",
+                "value": "app.log"
+            }
+        ],
+        "outputProperty": "logPath",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 620,
+        "y": 580,
+        "wires": [
+            [
+                "debug-flow"
+            ]
+        ]
+    },
+    {
+        "id": "debug-flow",
+        "type": "debug",
+        "z": "example-flow",
+        "name": "Flow Context Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "logPath",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 580,
+        "wires": []
+    }
+]

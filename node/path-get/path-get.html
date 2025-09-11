@@ -1,0 +1,160 @@
+<script type="text/javascript">
+    RED.nodes.registerType('path-get', {
+        category: 'function',
+        color: '#DEBD5C',
+        defaults: {
+            name: { value: '' },
+            input: { value: 'payload' },
+            inputType: { value: 'msg' },
+            getItem: { value: 'dirname' },
+            outputProperty: { value: 'payload' },
+            outputPropertyType: { value: 'msg' },
+            outputAs: { value: 'absolute' },
+            relativeTo: { value: '' },
+            relativeToType: { value: 'str' }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'font-awesome/fa-chain-broken',
+        label: function() {
+            return this.name || 'path get';
+        },
+        oneditprepare: function() {
+            var that = this;
+
+            // Input property
+            $('#node-input-input').typedInput({
+                default: 'msg',
+                typeField: '#node-input-inputType',
+                types: [
+                    'str', 
+                    'msg', 
+                    'flow', 
+                    'global',
+                    {
+                        value: 'cwd',
+                        label: 'current working directory',
+                        icon: 'fa fa-folder',
+                        hasValue: false
+                    }
+                ]
+            });
+            $('#node-input-input').typedInput('value', this.input);
+            $('#node-input-input').typedInput('type', this.inputType || 'msg');
+
+            // Get Item selector - control output options visibility
+            $('#node-input-getItem').on('change', function() {
+                var getItem = $(this).val();
+                if (getItem === 'dirname') {
+                    $('.output-options').show();
+                } else {
+                    $('.output-options').hide();
+                }
+            });
+
+            // Output property
+            $('#node-input-outputProperty').typedInput({
+                default: 'msg',
+                typeField: '#node-input-outputPropertyType',
+                types: ['msg', 'flow', 'global']
+            });
+            $('#node-input-outputProperty').typedInput('value', this.outputProperty);
+            $('#node-input-outputProperty').typedInput('type', this.outputPropertyType || 'msg');
+
+            // Output As selector
+            $('#node-input-outputAs').on('change', function() {
+                var outputAs = $(this).val();
+                if (outputAs === 'relative') {
+                    $('#form-row-relativeTo').show();
+                } else {
+                    $('#form-row-relativeTo').hide();
+                }
+            }).trigger('change');
+
+            // RelativeTo property
+            $('#node-input-relativeTo').typedInput({
+                default: 'str',
+                typeField: '#node-input-relativeToType',
+                types: ['str', 'msg', 'flow', 'global']
+            });
+            $('#node-input-relativeTo').typedInput('value', this.relativeTo);
+            $('#node-input-relativeTo').typedInput('type', this.relativeToType || 'str');
+            
+            // Initialize output options visibility
+            $('#node-input-getItem').trigger('change');
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="path-get">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="path-get.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]path-get.label.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-input"><i class="fa fa-sign-in"></i> <span data-i18n="path-get.label.input"></span></label>
+        <input type="text" id="node-input-input" style="width: 70%;">
+        <input type="hidden" id="node-input-inputType">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-getItem"><i class="fa fa-filter"></i> <span data-i18n="path-get.label.getItem"></span></label>
+        <select id="node-input-getItem">
+            <option value="dirname" data-i18n="path-get.getItem.dirname"></option>
+            <option value="basename" data-i18n="path-get.getItem.basename"></option>
+            <option value="extname" data-i18n="path-get.getItem.extname"></option>
+            <option value="filename" data-i18n="path-get.getItem.filename"></option>
+        </select>
+    </div>
+
+    <hr>
+
+    <div class="form-row">
+        <label for="node-input-outputProperty"><i class="fa fa-sign-out"></i> <span data-i18n="path-get.label.output"></span></label>
+        <input type="text" id="node-input-outputProperty" style="width: 70%;">
+        <input type="hidden" id="node-input-outputPropertyType">
+    </div>
+
+    <div class="form-row output-options">
+        <label for="node-input-outputAs"><i class="fa fa-cogs"></i> <span data-i18n="path-get.label.outputAs"></span></label>
+        <select id="node-input-outputAs">
+            <option value="absolute" data-i18n="path-get.outputAs.absolute"></option>
+            <option value="relative" data-i18n="path-get.outputAs.relative"></option>
+        </select>
+    </div>
+
+    <div id="form-row-relativeTo" class="form-row output-options">
+        <label for="node-input-relativeTo"><i class="fa fa-folder"></i> <span data-i18n="path-get.label.relativeTo"></span></label>
+        <input type="text" id="node-input-relativeTo" style="width: 70%;">
+        <input type="hidden" id="node-input-relativeToType">
+    </div>
+
+</script>
+
+<script type="text/html" data-help-name="path-get">
+    <p>A utility node for extracting parts of a path using Node.js path module.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">payload <span class="property-type">string</span></dt>
+        <dd>The default input path for extracting information.</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>The extracted path information. Always written to <code>msg.payload</code>.</dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>This node uses the standard Node.js <code>path</code> module to extract path information.</p>
+    <p>All paths are first normalized using <code>path.normalize()</code>.</p>
+    <h4>Get Options</h4>
+    <ul>
+        <li><b>Directory Name</b>: Returns the directory name using <code>path.dirname()</code>.</li>
+        <li><b>Base Name</b>: Returns the base name using <code>path.basename()</code>.</li>
+        <li><b>Extension Name</b>: Returns the extension using <code>path.extname()</code>.</li>
+        <li><b>File Name</b>: Returns the filename without extension.</li>
+    </ul>
+</script>

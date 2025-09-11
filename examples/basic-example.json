@@ -1,0 +1,234 @@
+[
+    {
+        "id": "basic-example",
+        "type": "tab",
+        "label": "Basic Path Utils",
+        "disabled": false,
+        "info": "Basic examples of path-join and path-get nodes"
+    },
+    {
+        "id": "inject-join",
+        "type": "inject",
+        "z": "basic-example",
+        "name": "Join Paths",
+        "props": [
+            {
+                "p": "folder",
+                "v": "documents",
+                "vt": "str"
+            },
+            {
+                "p": "filename",
+                "v": "report.pdf",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 120,
+        "y": 100,
+        "wires": [
+            [
+                "path-join-simple"
+            ]
+        ]
+    },
+    {
+        "id": "path-join-simple",
+        "type": "path-join",
+        "z": "basic-example",
+        "name": "Join: home + folder + filename",
+        "joinParts": [
+            {
+                "type": "str",
+                "value": "/home/user"
+            },
+            {
+                "type": "msg",
+                "value": "folder"
+            },
+            {
+                "type": "msg",
+                "value": "filename"
+            }
+        ],
+        "outputProperty": "payload",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 350,
+        "y": 100,
+        "wires": [
+            [
+                "debug-join",
+                "path-get-parts"
+            ]
+        ]
+    },
+    {
+        "id": "path-get-parts",
+        "type": "path-get",
+        "z": "basic-example",
+        "name": "Extract Directory",
+        "input": "payload",
+        "inputType": "msg",
+        "getItem": "dirname",
+        "outputProperty": "directory",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 580,
+        "y": 100,
+        "wires": [
+            [
+                "debug-get"
+            ]
+        ]
+    },
+    {
+        "id": "debug-join",
+        "type": "debug",
+        "z": "basic-example",
+        "name": "Joined Path",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "debug-get",
+        "type": "debug",
+        "z": "basic-example",
+        "name": "Directory",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "directory",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "inject-analyze",
+        "type": "inject",
+        "z": "basic-example",
+        "name": "Analyze File Path",
+        "props": [
+            {
+                "p": "payload",
+                "v": "/projects/webapp/src/utils/helper.js",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 150,
+        "y": 200,
+        "wires": [
+            [
+                "get-basename",
+                "get-extname",
+                "get-filename"
+            ]
+        ]
+    },
+    {
+        "id": "get-basename",
+        "type": "path-get",
+        "z": "basic-example",
+        "name": "Get Basename",
+        "input": "payload",
+        "inputType": "msg",
+        "getItem": "basename",
+        "outputProperty": "basename",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 380,
+        "y": 180,
+        "wires": [
+            [
+                "debug-parts"
+            ]
+        ]
+    },
+    {
+        "id": "get-extname",
+        "type": "path-get",
+        "z": "basic-example",
+        "name": "Get Extension",
+        "input": "payload",
+        "inputType": "msg",
+        "getItem": "extname",
+        "outputProperty": "extension",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 380,
+        "y": 220,
+        "wires": [
+            [
+                "debug-parts"
+            ]
+        ]
+    },
+    {
+        "id": "get-filename",
+        "type": "path-get",
+        "z": "basic-example",
+        "name": "Get Filename",
+        "input": "payload",
+        "inputType": "msg",
+        "getItem": "filename",
+        "outputProperty": "filename",
+        "outputPropertyType": "msg",
+        "outputAs": "absolute",
+        "relativeTo": "",
+        "relativeToType": "str",
+        "x": 380,
+        "y": 260,
+        "wires": [
+            [
+                "debug-parts"
+            ]
+        ]
+    },
+    {
+        "id": "debug-parts",
+        "type": "debug",
+        "z": "basic-example",
+        "name": "Path Parts",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 220,
+        "wires": []
+    }
+]

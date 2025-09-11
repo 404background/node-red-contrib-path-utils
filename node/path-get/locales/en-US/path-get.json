@@ -1,0 +1,23 @@
+{
+    "path-get": {
+        "label": {
+            "name": "Name",
+            "input": "Input",
+            "getItem": "Get Item",
+            "output": "Output",
+            "outputAs": "Output As",
+            "relativeTo": "Relative To"
+        },
+        "getItem": {
+            "dirname": "Directory Name",
+            "basename": "Base Name",
+            "extname": "Extension",
+            "filename": "Filename (without extension)"
+        },
+        "outputAs": {
+            "absolute": "Absolute Path",
+            "relative": "Relative Path"
+        },
+        "help": "A utility node to get path information using Node.js path module. Select 'current working directory' to get process.cwd()."
+    }
+}

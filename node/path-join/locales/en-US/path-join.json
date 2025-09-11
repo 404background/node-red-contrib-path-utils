@@ -1,0 +1,16 @@
+{
+    "path-join": {
+        "label": {
+            "name": "Name",
+            "joinParts": "Parts to Join",
+            "output": "Output to",
+            "outputAs": "Output As",
+            "relativeTo": "Relative To"
+        },
+        "outputAs": {
+            "absolute": "Absolute Path",
+            "relative": "Relative Path"
+        },
+        "help": "A utility node for joining multiple path segments into a single path using Node.js path module."
+    }
+}
