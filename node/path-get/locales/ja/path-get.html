@@ -1,0 +1,32 @@
+<script type="text/html" data-help-name="path-get">
+    <p>Node.js の <code>path</code> モジュールで、パスの一部（ディレクトリ名・ベース名・拡張子・ファイル名）を取り出します。</p>
+
+    <h3>入力</h3>
+    <dl class="message-properties">
+        <dt class="optional">payload <span class="property-type">文字列</span></dt>
+        <dd><b>入力</b> が <code>msg.payload</code> のままのとき、読み取るパス。
+            他の msg プロパティ、フロー / グローバルコンテキスト（コンテキストストア指定を含む）、環境変数、固定文字列、
+            Node-RED の <b>カレントディレクトリ</b>（<code>process.cwd()</code>）も指定できます。</dd>
+    </dl>
+
+    <h3>出力</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">文字列</span></dt>
+        <dd>取り出した値。既定では <code>msg.payload</code> に書き込みます。<b>出力</b> で別の msg プロパティやフロー / グローバルコンテキストのキーを指定できます。</dd>
+    </dl>
+
+    <h3>詳細</h3>
+    <p>入力パスは最初に <code>path.normalize()</code> で正規化します。</p>
+    <ul>
+        <li><b>ディレクトリ名</b>: <code>path.dirname()</code>。入力がカレントディレクトリのときは、そのディレクトリ自身を返します。</li>
+        <li><b>ベース名</b>: <code>path.basename()</code>。</li>
+        <li><b>拡張子</b>: <code>path.extname()</code>。</li>
+        <li><b>ファイル名 (拡張子なし)</b>: ベース名から拡張子を除いたもの。</li>
+    </ul>
+    <h4>出力形式（ディレクトリ名のみ）</h4>
+    <ul>
+        <li><b>絶対パス</b>（既定）: <code>path.resolve()</code> で解決します。相対パスは Node-RED プロセスのカレントディレクトリを基準にします。</li>
+        <li><b>相対パス</b>: <b>基準パス</b> からの相対パス（<code>path.relative()</code>）。</li>
+    </ul>
+    <p>エラー（入力パスがない、基準パスが不正など）は Catch ノードで受け取れます。</p>
+</script>

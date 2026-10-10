@@ -1,8 +1,26 @@
-<script type="text/html" data-help-name="example-node">
-  <p>
-    このノードは挨拶メッセージを出力します。ノードの設定で挨拶メッセージを設定できます。
-  </p>
-  <p>
-    入力メッセージをトリガーとして、設定された挨拶メッセージを<code>msg.payload</code>に代入して出力します。
-  </p>
+<script type="text/html" data-help-name="path-join">
+    <p>Node.js の <code>path</code> モジュールで、複数のパス要素を1つのパスに結合します。</p>
+
+    <h3>入力</h3>
+    <dl class="message-properties">
+        <dt class="optional">payload <span class="property-type">任意</span></dt>
+        <dd>任意の msg プロパティを結合する要素に使えます。</dd>
+    </dl>
+
+    <h3>出力</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">文字列</span></dt>
+        <dd>結合したパス。既定では <code>msg.payload</code> に書き込みます。<b>出力先</b> で別の msg プロパティやフロー / グローバルコンテキストのキーを指定できます。</dd>
+    </dl>
+
+    <h3>詳細</h3>
+    <p>各要素には、固定文字列、msg プロパティ、フロー / グローバルコンテキスト（コンテキストストア指定を含む）、環境変数、
+       Node-RED の <b>カレントディレクトリ</b>（<code>process.cwd()</code>）を指定できます。
+       値がない要素や空文字列の要素は飛ばし、残りを <code>path.join()</code> で結合して <code>path.normalize()</code> で正規化します。</p>
+    <h4>出力形式</h4>
+    <ul>
+        <li><b>絶対パス</b>（既定）: <code>path.resolve()</code> で解決します。相対パスは Node-RED プロセスのカレントディレクトリを基準にします。</li>
+        <li><b>相対パス</b>: <b>基準ディレクトリ</b> からの相対パス（<code>path.relative()</code>）。</li>
+    </ul>
+    <p>エラー（結合する要素がない、基準ディレクトリが不正など）は Catch ノードで受け取れます。</p>
 </script>

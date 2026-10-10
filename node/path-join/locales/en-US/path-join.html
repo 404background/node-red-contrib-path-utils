@@ -1,8 +1,27 @@
-<script type="text/html" data-help-name="example-node">
-  <p>
-    This node outputs a greeting message. You can configure the greeting message in the node's settings.
-  </p>
-  <p>
-    The input message triggers the node, and the configured greeting message is assigned to <code>msg.payload</code> and sent as output.
-  </p>
+<script type="text/html" data-help-name="path-join">
+    <p>Joins several path segments into one path with the Node.js <code>path</code> module.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">payload <span class="property-type">any</span></dt>
+        <dd>Any message property can be used as a segment.</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>The joined path. Written to <code>msg.payload</code> by default; <b>Output</b> can name another message property or a flow / global context key instead.</dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>Each segment is a fixed string, a message property, a flow / global context value (including a context store),
+       an environment variable or the <b>current working directory</b> of Node-RED (<code>process.cwd()</code>).
+       Segments that resolve to nothing or to an empty string are skipped. The rest are joined with <code>path.join()</code>
+       and normalized with <code>path.normalize()</code>.</p>
+    <h4>Output As</h4>
+    <ul>
+        <li><b>Absolute Path</b> (default): resolved with <code>path.resolve()</code>. A relative result is resolved against the working directory of the Node-RED process.</li>
+        <li><b>Relative Path</b>: relative to <b>Relative To</b>, with <code>path.relative()</code>.</li>
+    </ul>
+    <p>Errors (no segment to join, invalid base directory) can be caught with a Catch node.</p>
 </script>

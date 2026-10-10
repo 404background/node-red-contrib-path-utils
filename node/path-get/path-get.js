@@ -8,7 +8,10 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         const node = this;
 
-        node.on('input', function(msg) {
+        node.on('input', function(msg, send, done) {
+            // Node-RED 0.x compatibility
+            send = send || function() { node.send.apply(node, arguments); };
+            done = done || function(err) { if (err) { node.error(err, msg); } };
             try {
                 let inputPath;
                 
@@ -18,7 +21,7 @@ module.exports = function(RED) {
                 } else {
                     inputPath = utils.getTypedInputValue(config.inputType || 'msg', config.input || 'payload', msg, node);
                     if (typeof inputPath !== 'string') {
-                        node.error("Input path is not a string.", msg);
+                        done("Input path is not a string.");
                         return;
                     }
                 }
@@ -46,7 +49,7 @@ module.exports = function(RED) {
                         result = path.basename(normalizedPath, path.extname(normalizedPath));
                         break;
                     default:
-                        node.error("Invalid get item: " + getItem, msg);
+                        done("Invalid get item: " + getItem);
                         return;
                 }
 
@@ -60,26 +63,17 @@ module.exports = function(RED) {
                 } else if (getItem === 'dirname' && outputAs === 'relative') {
                     const relativeTo = utils.getTypedInputValue(config.relativeToType || 'str', config.relativeTo, msg, node);
                     if (typeof relativeTo !== 'string') {
-                        node.error("Base directory for relative path is not a string.", msg);
+                        done("Base directory for relative path is not a string.");
                         return;
                     }
                     result = path.relative(relativeTo, result);
                 }
 
-                // Set output
-                const outputProperty = config.outputProperty || 'payload';
-                const outputPropertyType = config.outputPropertyType || 'msg';
-                if (outputPropertyType === 'msg') {
-                    RED.util.setMessageProperty(msg, outputProperty, result);
-                } else if (outputPropertyType === 'flow') {
-                    node.context().flow.set(outputProperty, result);
-                } else if (outputPropertyType === 'global') {
-                    node.context().global.set(outputProperty, result);
-                }
-                node.send(msg);
-
+                utils.setOutputValue(config.outputPropertyType || 'msg', config.outputProperty || 'payload', result, msg, node);
+                send(msg);
+                done();
             } catch (err) {
-                node.error(err.message, msg);
+                done(err);
             }
         });
     }

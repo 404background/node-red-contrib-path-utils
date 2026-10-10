@@ -1,0 +1,32 @@
+<script type="text/html" data-help-name="path-get">
+    <p>Extracts a part of a path (directory, base name, extension or file name) with the Node.js <code>path</code> module.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">payload <span class="property-type">string</span></dt>
+        <dd>The path to read, when <b>Input</b> is left at <code>msg.payload</code>.
+            The input can also come from another message property, flow / global context (including a context store), an environment variable, a fixed string,
+            or the <b>current working directory</b> of Node-RED (<code>process.cwd()</code>).</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>The extracted part. Written to <code>msg.payload</code> by default; <b>Output</b> can name another message property or a flow / global context key instead.</dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>The input path is first normalized with <code>path.normalize()</code>.</p>
+    <ul>
+        <li><b>Directory Name</b>: <code>path.dirname()</code>. When the input is the current working directory, the directory itself is returned.</li>
+        <li><b>Base Name</b>: <code>path.basename()</code>.</li>
+        <li><b>Extension</b>: <code>path.extname()</code>.</li>
+        <li><b>Filename (without extension)</b>: the base name without its extension.</li>
+    </ul>
+    <h4>Output As (Directory Name only)</h4>
+    <ul>
+        <li><b>Absolute Path</b> (default): resolved with <code>path.resolve()</code>. A relative input is resolved against the working directory of the Node-RED process.</li>
+        <li><b>Relative Path</b>: relative to <b>Relative To</b>, with <code>path.relative()</code>.</li>
+    </ul>
+    <p>Errors (no input path, invalid base directory) can be caught with a Catch node.</p>
+</script>

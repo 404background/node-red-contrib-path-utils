@@ -31,6 +31,7 @@
                     'msg', 
                     'flow', 
                     'global',
+                    'env',
                     {
                         value: 'cwd',
                         label: 'current working directory',
@@ -75,7 +76,7 @@
             $('#node-input-relativeTo').typedInput({
                 default: 'str',
                 typeField: '#node-input-relativeToType',
-                types: ['str', 'msg', 'flow', 'global']
+                types: ['str', 'msg', 'flow', 'global', 'env']
             });
             $('#node-input-relativeTo').typedInput('value', this.relativeTo);
             $('#node-input-relativeTo').typedInput('type', this.relativeToType || 'str');
@@ -130,31 +131,4 @@
         <input type="hidden" id="node-input-relativeToType">
     </div>
 
-</script>
-
-<script type="text/html" data-help-name="path-get">
-    <p>A utility node for extracting parts of a path using Node.js path module.</p>
-
-    <h3>Inputs</h3>
-    <dl class="message-properties">
-        <dt class="optional">payload <span class="property-type">string</span></dt>
-        <dd>The default input path for extracting information.</dd>
-    </dl>
-
-    <h3>Outputs</h3>
-    <dl class="message-properties">
-        <dt>payload <span class="property-type">string</span></dt>
-        <dd>The extracted path information. Always written to <code>msg.payload</code>.</dd>
-    </dl>
-
-    <h3>Details</h3>
-    <p>This node uses the standard Node.js <code>path</code> module to extract path information.</p>
-    <p>All paths are first normalized using <code>path.normalize()</code>.</p>
-    <h4>Get Options</h4>
-    <ul>
-        <li><b>Directory Name</b>: Returns the directory name using <code>path.dirname()</code>.</li>
-        <li><b>Base Name</b>: Returns the base name using <code>path.basename()</code>.</li>
-        <li><b>Extension Name</b>: Returns the extension using <code>path.extname()</code>.</li>
-        <li><b>File Name</b>: Returns the filename without extension.</li>
-    </ul>
 </script>

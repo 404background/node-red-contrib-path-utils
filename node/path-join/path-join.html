@@ -32,6 +32,7 @@
                             'msg', 
                             'flow', 
                             'global',
+                            'env',
                             {
                                 value: 'cwd',
                                 label: 'current working directory',
@@ -78,7 +79,7 @@
             $('#node-input-relativeTo').typedInput({
                 default: 'str',
                 typeField: '#node-input-relativeToType',
-                types: ['str', 'msg', 'flow', 'global']
+                types: ['str', 'msg', 'flow', 'global', 'env']
             });
             $('#node-input-relativeTo').typedInput('value', this.relativeTo);
             $('#node-input-relativeTo').typedInput('type', this.relativeToType || 'str');
@@ -132,45 +133,3 @@
     </div>
 
 </script>
-
-<script type="text/html" data-help-name="path-join">
-    <p>A utility node for joining multiple path segments into a single path using Node.js path module.</p>
-
-    <h3>Inputs</h3>
-    <dl class="message-properties">
-        <dt class="optional">payload <span class="property-type">any</span></dt>
-        <dd>Input message (may be used by configured path parts).</dd>
-    </dl>
-
-    <h3>Outputs</h3>
-    <dl class="message-properties">
-        <dt>payload <span class="property-type">string</span></dt>
-        <dd>The resulting joined path. By default, the result is written to <code>msg.payload</code>.</dd>
-    </dl>
-
-    <h3>Details</h3>
-    <p>This node uses the standard Node.js <code>path.join()</code> method to combine multiple path segments.</p>
-    <p>All paths are first normalized using <code>path.normalize()</code>.</p>
-    <h4>Output Options</h4>
-    <ul>
-        <li><b>Normalize</b>: (Default) Outputs the normalized path.</li>
-        <li><b>Absolute</b>: Outputs the absolute path using <code>path.resolve()</code>.</li>
-        <li><b>Relative</b>: Outputs the relative path from a specified base directory.</li>
-    </ul>
-</script>
-    <dl class="message-properties">
-        <dt>payload <span class="property-type">string | object</span></dt>
-        <dd>The resulting path or an object containing path parts. By default, the result is written to <code>msg.payload</code>.</dd>
-    </dl>
-
-    <h3>Details</h3>
-    <p>This node uses the standard Node.js <code>path</code> module to provide cross-platform path manipulation.</p>
-    <p>All paths are first normalized using <code>path.normalize()</code>.</p>
-    <h4>Output Options</h4>
-    <ul>
-        <li><b>Normalize</b>: (Default) Outputs the normalized path.</li>
-        <li><b>Absolute</b>: Outputs the absolute path using <code>path.resolve()</code>.</li>
-        <li><b>Relative</b>: Outputs the relative path from a specified base directory.</li>
-    </ul>
-</script>
-
